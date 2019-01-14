@@ -114,15 +114,25 @@ var app = new Vue({
         queryString = queryString.substring(1);
       }
 
-      queryString = queryString.split('|');
+      if (queryString === 'create') {
+        var image = prompt('URL of image to use');
+        var option1 = prompt('Text for the first option', 'Sugar puffs');
+        var option2 = prompt('Text for the second option', 'Frosties');
 
-      queryString = queryString.map(decodeURIComponent);
+        var newUrl = window.location.origin + '?' + encodeURIComponent(image) + '|' + encodeURIComponent(option1) + '|' + encodeURIComponent(option2);
 
-      if (queryString[0]) {
-        this.image = queryString[0];
-      }
-      if (queryString[1] && queryString[2]) {
-        this.choices = queryString[1] + ', ' + queryString[2];
+        window.location = newUrl;
+      } else {
+        queryString = queryString.split('|');
+
+        queryString = queryString.map(decodeURIComponent);
+
+        if (queryString[0]) {
+          this.image = queryString[0];
+        }
+        if (queryString[1] && queryString[2]) {
+          this.choices = queryString[1] + ', ' + queryString[2];
+        }
       }
     }
 
