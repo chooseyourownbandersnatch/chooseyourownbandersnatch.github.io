@@ -66,9 +66,13 @@ Vue.component(
       }
     },
     created: function() {
-      this.options = this.choices.split(',');
+
     },
     mounted: function() {
+      this.options = this.choices.split(',');
+      this.selected = -1;
+      this.active = false;
+      
       setTimeout(() => {
         this.active = true;  
       }, 0);
@@ -90,10 +94,42 @@ let app = new Vue({
   el: '#app',
   template: `
     <div>
-      <bs-player :image="images[random(images.length)]"></bs-player>
-      <bs-chooser choices="Sugar Puffs, Frosties"></bs-chooser>
+      <bs-player :image="image"></bs-player>
+      <bs-chooser :choices="choices" :key="key"></bs-chooser>
     </div>
-  `
+  `,
+  data: {
+    key: 123,
+    image: '',
+    choices: ''
+  },
+  created: function() {
+    this.image = images[random(images.length)];
+    this.choices = 'Sugar Puffs, Frosties';
+    
+    if (window.location.search) {
+      let queryString = window.location.search;
+
+      if (queryString.charAt(0) === '?') {
+        queryString = queryString.substring(1);
+      }
+
+      queryString = queryString.split('|');
+
+      queryString = queryString.map(decodeURIComponent);
+      
+      if (queryString[0]) {
+        this.image = queryString[0];
+      }
+      if (queryString[1] && queryString[2]) {
+        this.choices = `${queryString[1]}, ${queryString[2]}`;
+      }
+    }    
+    
+    setInterval(() => {
+      this.key = random(999999);  
+    }, 20 * 1000);
+  }
 });
 
 function random(n) {

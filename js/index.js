@@ -66,9 +66,13 @@ Vue.component(
     } },
 
   created: function created() {
-    this.options = this.choices.split(',');
+
   },
   mounted: function mounted() {var _this = this;
+    this.options = this.choices.split(',');
+    this.selected = -1;
+    this.active = false;
+
     setTimeout(function () {
       _this.active = true;
     }, 0);
@@ -88,12 +92,44 @@ Vue.component(
 
 var app = new Vue({
   el: '#app',
-  template: '\n    <div>\n      <bs-player :image="images[random(images.length)]"></bs-player>\n      <bs-chooser choices="Sugar Puffs, Frosties"></bs-chooser>\n    </div>\n  ' });
+  template: '\n    <div>\n      <bs-player :image="image"></bs-player>\n      <bs-chooser :choices="choices" :key="key"></bs-chooser>\n    </div>\n  ',
 
 
 
 
 
+  data: {
+    key: 123,
+    image: '',
+    choices: '' },
+
+  created: function created() {var _this2 = this;
+    this.image = images[random(images.length)];
+    this.choices = 'Sugar Puffs, Frosties';
+
+    if (window.location.search) {
+      var queryString = window.location.search;
+
+      if (queryString.charAt(0) === '?') {
+        queryString = queryString.substring(1);
+      }
+
+      queryString = queryString.split('|');
+
+      queryString = queryString.map(decodeURIComponent);
+
+      if (queryString[0]) {
+        this.image = queryString[0];
+      }
+      if (queryString[1] && queryString[2]) {
+        this.choices = queryString[1] + ', ' + queryString[2];
+      }
+    }
+
+    setInterval(function () {
+      _this2.key = random(999999);
+    }, 20 * 1000);
+  } });
 
 
 function random(n) {
