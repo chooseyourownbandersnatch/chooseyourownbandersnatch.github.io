@@ -1,0 +1,111 @@
+$color-black: #000;
+$color-white: #FFF;
+$color-grey: #7F7F7F;
+
+body {
+  background: $color-black;
+}
+
+.chooser {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s;
+  background: $color-black;
+
+  &.active {
+    max-height: 190px;  
+  }
+  
+  &-timer {
+    background: $color-white;
+    height: 4px;
+    margin: 0 auto;
+    width: 100%;
+    transition: width 10s;
+    visibility: hidden;
+    
+    .active & {
+      width: 0;
+      visibility: visible;
+    }
+
+    .selectionMade & {
+      background: $color-grey;
+    }
+  }
+  
+  &-choices {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 23px 0 37px 0;
+  }
+  
+  &-choice {
+    border: none;
+    background: transparent;
+    color: $color-grey;
+    padding: 30px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+    font-size: 2.1em;
+    letter-spacing: 0.06em;
+    outline: none;
+    transition: color 0.5s;
+    
+    &.selected {
+      color: $color-white;
+      cursor: default;
+    }
+    
+    &.hidden {
+      visibility: hidden;
+    }    
+    
+    &:after {
+      display: block;
+      content: ' ';
+      background: linear-gradient(to bottom, 
+        #C0C0C0 0%,
+        #C0C0C0 25%,
+        #EAEAEA 26%,
+        #EAEAEA 50%,
+        #DEDEDE 51%,
+        #DEDEDE 75%,
+        #C0C0C0 76%,
+        #C0C0C0 100%
+      );
+      box-shadow: inset 45px 0px 40px -12px rgba(0,0,0,0.9), inset -45px 0px 40px -12px rgba(0,0,0,0.9);
+      width: 100%;
+      margin-top: 21px;
+      height: 4px;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }    
+    
+    &:not(.selected):focus,
+    &:not(.selected):hover {
+      color: $color-white;
+
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.player {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-black;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}

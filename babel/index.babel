@@ -1,0 +1,102 @@
+const images = [
+  'https://www.goombastomp.com/wp-content/uploads/2018/12/tumblr_pkehu6PaoE1weghcuo2_500.gif',
+  'https://m0.joe.ie/wp-content/uploads/2018/12/31115507/Bander.gif',
+  'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/black-mirror-bandersnatch-netflix-10-1546183044.gif',
+  'http://secretldn.com/wp-content/uploads/2018/12/Netflix-Black-Mirror-2018.gif'
+];
+
+Vue.component(
+  'bs-player',
+  {
+    props: ['image'],
+    template: `
+<div class="player" :style="{ 'background-image': 'url(' + image + ')' }">
+</div>
+    `,
+    data: function() {
+      return {
+      }
+    },
+    computed: {
+    },
+    methods: {
+    },
+    created: function() {
+    },
+    mounted: function() {
+    }
+  }
+);
+
+Vue.component(
+  'bs-chooser',
+  {
+    props: ['choices'],
+    template: `
+      <div class="chooser" :class="chooserClass">
+        <div class="chooser-timer">
+        </div>
+        <div class="chooser-choices">
+          <button class="chooser-choice" v-for="(option, index) in options" @click="select(index)" :class="selected === -1 ? null : (selected === index ? 'selected' : 'hidden')">
+            {{ option }}
+          </button>
+        </div>
+      </div>
+    `,
+    data: function() {
+      return {
+        options: [],
+        selected: -1,
+        active: false
+      }
+    },
+    computed: {
+      chooserClass: function() {
+        return [
+          this.selected !== -1 ? 'selectionMade' : '',
+          this.active ? 'active' : ''
+        ].join(' ');
+      }
+    },
+    methods: {
+      select: function(option) {
+        if (this.selected === -1) {
+          this.selected = option;
+        }
+      }
+    },
+    created: function() {
+      this.options = this.choices.split(',');
+    },
+    mounted: function() {
+      setTimeout(() => {
+        this.active = true;  
+      }, 0);
+
+      setTimeout(() => {
+        if (this.selected === -1) {
+          this.select(random(this.options.length));
+        }
+
+        this.active = false;
+        // Fire callback
+      }, 10 * 1000);
+    }
+  }
+);
+
+
+let app = new Vue({
+  el: '#app',
+  template: `
+    <div>
+      <bs-player :image="images[random(images.length)]"></bs-player>
+      <bs-chooser choices="Sugar Puffs, Frosties"></bs-chooser>
+    </div>
+  `
+});
+
+function random(n) {
+  return Math.floor(Math.random() * n);
+}
+
